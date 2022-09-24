@@ -16,6 +16,7 @@ public:
     void Loadinfo();
   
     void printfInfo(int index);
+    void printfInfo(int *cardNum,char *buf);
     void printfInfo(int *cardNum);
   
     bool FindInfo(std::string Infostr);
@@ -32,10 +33,13 @@ public:
     MemberInfo memberInfo;
     std::vector<MemberInfo> InfoList;
 
-
+    
+    
+    int Card_ID;
+    
     FILE *fpData;
 private:
-    
+   
 };
 
 #endif

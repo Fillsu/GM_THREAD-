@@ -1,11 +1,16 @@
 #include "GMService.h"
 
-GMService::GMService():meberentity(new MemberEntity)
+
+GMService::GMService(TCPServer *server):meberentity(new MemberEntity)
 {
+ this->server=server;
  GMState=CARD_READ;
  memeberid=meberentity->InfoList.size();
  member_add=0;
  rfid_view=new RFID_View();
+ //component=new ComDev();
+ 
+
 }
 
 GMService::~GMService()
@@ -13,18 +18,37 @@ GMService::~GMService()
 
 }
 
+
  void GMService::updateService(std::string GMstr)
 {   // std::cout<<" "<<std::endl;
+   
+   if(GMstr=="search")
+    {   
+        sprintf(write_buf,"you got search");
+        server->writemsg(write_buf);
+    
+    }
+
+       if(GMstr=="wrong")
+    {   
+        sprintf(write_buf,"you got wrong");
+        server->writemsg(write_buf);
+    
+    }
     switch (GMState)
     {
+
+
     case CARD_READ:
     if(GMstr=="MODECHECK")
     {   //int a=0;
         GMState=CARD_REG;
-       // sprintf(rfid_view->lcdbuf,"REGISTERING");
-      //  rfid_view->updateView("CARDCHECK");
-      //  std::cout<<"REGISTERING"<<std::endl;
-       //printf("REGISTERING");
+       sprintf(rfid_view->lcdbuf,"REGISTERING      ");
+       sprintf(rfid_view->lcdbuf2,"Use your card");
+        
+        rfid_view->updateView("CARDCHECK");
+        //std::cout<<"REGISTERING"<<std::endl;
+     //  printf("REGISTERING");
 
         
         //std::cout<<command<<std::endl;
@@ -35,9 +59,11 @@ GMService::~GMService()
     {
         GMState=CARD_READ;
        // std::cout<<"READING"<<std::endl;
-      // sprintf(rfid_view->lcdbuf,"READING");
-      //  rfid_view->updateView("CARDCHECK");
-      //  printf("READING");
+        sprintf(rfid_view->lcdbuf,"Welcome GolfFild");
+        sprintf(rfid_view->lcdbuf2,"Use your card");
+       rfid_view->updateView("CARDCHECK");
+      // std::cout<<"READING"<<std::endl;
+       // printf("READING");
     }
     break;
     }
@@ -57,13 +83,20 @@ GMService::~GMService()
     case CARD_READ:
     if((meberentity->FindInfo(cardNum))==1)
     {    
+        //meberentity->printfInfo(cardNum);
+       // printf("Registered Number\n");
+        sprintf(rfid_view->lcdbuf,"Welcome GolfField");
         
-        printf("Registered Number\n");
-
+        meberentity->printfInfo(cardNum,rfid_view->lcdbuf2);
+        server->writemsg(rfid_view->lcdbuf2);
+        rfid_view->updateView("CARDCHECK");
+       // std::cout<<rfid_view->lcdbuf2<<std::endl;
+       // sprintf(rfid_view->lcdbuf2,meberentity->Card_ID);
         //std::cout<<"Registered Number"<<std::endl;
         //meberentity->printfInfo(52000);
         //meberentity->printfInfo(52001);
-        meberentity->printfInfo(cardNum);
+      
+        
             //  for(int i=0;i<5;i++)
             // { 
             //    // printf("ddd %d",a);
@@ -73,7 +106,10 @@ GMService::~GMService()
     }
     else 
     {
-        std::cout<<"Not Registered Number"<<std::endl;
+        std::cout<<"Not Registered Member"<<std::endl;
+        sprintf(rfid_view->lcdbuf,"Not Registered    ");
+        sprintf(rfid_view->lcdbuf2,"Please Regist    ");
+        rfid_view->updateView("CARDCHECK");
     }
     break;
 
@@ -109,7 +145,7 @@ GMService::~GMService()
 
         memcpy(temp.cardNum,cardNum,sizeof(temp.cardNum));
        // temp.id=memeberid;
-       temp.id=52001;
+       temp.id=memeberid+member_add;
         member_add++;
         }
 
@@ -118,6 +154,9 @@ GMService::~GMService()
     // strcpy(temp.address,"11dong 123ho");
     // strcpy(temp.phoneNumber,"222 222 2222");
     // memcpy(temp.cardNum,cardNum,sizeof(temp.cardNum));
+        sprintf(rfid_view->lcdbuf,"Resister is done");
+        sprintf(rfid_view->lcdbuf2,"                ");
+        rfid_view->updateView("CARDCHECK");
         std::cout<<"Register is Done "<<std::endl;
         meberentity->Addinfo(temp);
         break;

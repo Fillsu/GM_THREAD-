@@ -7,12 +7,74 @@
 #include "RFID_View.h"
 #include "GM.h"
 #include "MemberEntity.h"
+#include "TCPServer.h"
 #include <cstring>
+#include <thread>
+#include <unistd.h>
+#include <queue>
+
+
+std::queue<char> msgqueue;
+
+void Server_thread(TCPServer *server )
+{
+
+    int end=0;
+// int counter=0;
+// for(int i=0;i<10;i++)
+// {
+
+//         printf("thread function ;%d\n",counter ++);
+//         sleep(1);//unistd.h에 선언 
+// }
+    
+    printf("start thread\n");
+    while(1)
+    {
+
+        if(server->waitaccept()>0)
+        {   
+            
+            
+            server->setClientState(true);
+            end=server->readmsg();
+            
+           // end=strlen(server->read_mesg);
+            
+            for(int i=0;i<end;i++)
+            msgqueue.push(server->read_mesg[i]);
+            msgqueue.push('\0');    
+            //close(server->clientSock_ft); 
+            
+           // queueflag=1;
+            // while(!(msgqueue.front()=='\0'))
+            // {
+            // printf("%c",msgqueue.front());
+            // msgqueue.pop();
+            // }
+            // msgqueue.pop();
+            
+            // while(!(c=='\0'))
+            // {
+            // c=msgqueue.front();
+            // printf("%c",c);
+            // }
+           
+        }
+        
+    }
+
+}
 
 int main(void)
 {
+    printf("fssadf");
 GM *gm1=new GM();
+gm1->listener1->msgqueue=&msgqueue;
+std::thread f1(Server_thread,gm1->server);
+
 gm1->GM_Run();
+
 // mfrc522 rfid(new SPI(10, 3000000));
 
 //RFID_View rfidview1;

@@ -19,6 +19,7 @@ public:
     LCD *lcd;
 
     char lcdbuf[20];
+    char lcdbuf2[20];
 
 private:
 

@@ -2,7 +2,7 @@
 #define COMDEV_H
 
 #pragma once
-
+#include "TCPServer.h"
 class ComDev
 {
 public:

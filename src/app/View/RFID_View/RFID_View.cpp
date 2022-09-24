@@ -3,6 +3,8 @@
 RFID_View::RFID_View()
 {
 lcd=new LCD(new I2C("/dev/i2c-1", 0x27));
+lcd->WriteStringXY(0,0,"Welcome GolfFild");
+lcd->WriteStringXY(1,0,"Use your card");
 }
 
 RFID_View::~RFID_View()
@@ -13,8 +15,8 @@ RFID_View::~RFID_View()
 void RFID_View::updateView(std::string rfidstr)
 {
 //std::cout<<"LCD "<<std::endl;
-lcd->WriteStringXY(0,0,"           ");
 lcd->WriteStringXY(0,0,lcdbuf);
+lcd->WriteStringXY(1,0,lcdbuf2);
     // if(rfidstr=="CARDCHECK")
     // {       
 

@@ -10,6 +10,7 @@
 #include "Control.h"
 #include "GMService.h"
 
+
 class GM
 {
 public:
@@ -17,12 +18,14 @@ public:
     ~GM();
     void GM_Run();
 
- 
+TCPServer *server;
 CardReader *cardreader;
 RFID_View *rfidview1;
 GMService  *GMservicer;
 Control *cont;
 Listener *listener1;
+
+
 
 
 private:

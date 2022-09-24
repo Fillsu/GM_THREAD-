@@ -5,7 +5,7 @@ MemberEntity::MemberEntity()
 {
 //fpData=fopen("memberLists.bin","r+");
     Loadinfo();
-    std::cout<<InfoList.size()<<std::endl;
+    //std::cout<<InfoList.size()<<std::endl;
 }
 
 MemberEntity::~MemberEntity()
@@ -112,6 +112,7 @@ bool MemberEntity::FindInfo(std::string Infostr)
 }
 
 
+
 bool MemberEntity::FindInfo(int *cardNum)
 {
     for(const auto &member:InfoList)
@@ -119,6 +120,7 @@ bool MemberEntity::FindInfo(int *cardNum)
         if(memcmp(member.cardNum,cardNum,sizeof(member.cardNum))==0)
         {
             //printfInfo(member.id);
+            Card_ID=member.id;
             return true ;
             
         }
@@ -128,12 +130,30 @@ bool MemberEntity::FindInfo(int *cardNum)
 }
 
 
+void MemberEntity::printfInfo(int *cardNum,char *buf)
+{//char a[3]="dd";
+    for(const auto &member:InfoList)
+    {
+        if(memcmp(member.cardNum,cardNum,sizeof(member.cardNum))==0)
+        {   
+            //std::cout<<a<<std::endl;
+            std::cout<<InfoList[member.id].name<<std::endl;
+            sprintf(buf,"%s Member     ",InfoList[member.id].name);
+           // printfInfo(member.id);
+                        
+        }
+    }
+
+}
+
 void MemberEntity::printfInfo(int *cardNum)
 {
     for(const auto &member:InfoList)
     {
         if(memcmp(member.cardNum,cardNum,sizeof(member.cardNum))==0)
         {
+        
+            
             printfInfo(member.id);
                         
         }

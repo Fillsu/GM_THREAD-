@@ -9,7 +9,7 @@
 #include "Control.h"
 #include "Device_Data.h"
 #include "ManageButton.h"
-
+#include <queue>
 class Listener
 {
 public:
@@ -28,6 +28,9 @@ public:
     void updateView();
     uint8_t *a;
     ManageButton *modeButton;
+    std::queue<char> *msgqueue;
+
+    char comp[10];
 private:
 
 };

@@ -18,7 +18,14 @@ Control::~Control()
 
  void Control::updateRFID(std::string rfidstr)
  {
-
+if(rfidstr=="search")
+{
+   GMservicer->updateService("search");
+}
+if(rfidstr=="wrong")
+{
+   GMservicer->updateService("wrong");
+}
 if(rfidstr=="CARDREAD")
 {
 //cardread->getCardNumber();

@@ -39,7 +39,41 @@ Listener::~Listener()
 
 void Listener::checkEvent()
 {
-    
+             int i=0;
+            if(!(msgqueue->empty()))
+            {
+           // std::cout<<" "<<std::endl ;
+            while(!(msgqueue->front()=='\0'))
+            {
+            
+            std::cout<<msgqueue->front()<<std::endl ;
+            comp[i]=msgqueue->front();
+            //printf("%c",msgqueue->front());
+            msgqueue->pop();
+            i++;
+            }
+            comp[i]='\0';
+            msgqueue->pop();
+
+
+                 if(strcmp(comp,"search")==0)
+                {
+                    std::cout<<"check"<<std::endl;
+                    comp[0]='\0';
+                    cont->updateRFID("search");
+                }
+                else
+                {
+                std::cout<<"wrong"<<std::endl;
+                comp[0]='\0';
+                cont->updateRFID("wrong");
+                }
+
+            }
+
+
+       
+
 static int precard=0;
 if(millis()-precard>1000)
 {
@@ -57,7 +91,8 @@ if(modeButton->checkButton())
 
      cont->updateRFID("MODECHECK");
    // std::cout<<"dd"<<std::endl;
-    
+   //printf("ddfasdfsdf");
+ 
 
 }
 
