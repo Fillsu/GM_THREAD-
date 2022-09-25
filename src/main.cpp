@@ -31,7 +31,7 @@ void Server_thread(TCPServer *server )
     printf("start thread\n");
     while(1)
     {
-
+        usleep(40);
         if(server->waitaccept()>0)
         {   
             
@@ -68,10 +68,10 @@ void Server_thread(TCPServer *server )
 
 int main(void)
 {
-    printf("fssadf");
+   
 GM *gm1=new GM();
 gm1->listener1->msgqueue=&msgqueue;
-std::thread f1(Server_thread,gm1->server);
+std::thread f1(Server_thread,gm1->component->server);
 
 gm1->GM_Run();
 

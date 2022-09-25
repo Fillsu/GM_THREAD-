@@ -18,7 +18,8 @@ public:
     void printfInfo(int index);
     void printfInfo(int *cardNum,char *buf);
     void printfInfo(int *cardNum);
-  
+    void printfInfo_server(int *cardNum,char *buf);
+    void printfInfo_server(std::string Infostr,char *buf);
     bool FindInfo(std::string Infostr);
     bool FindInfo(int *cardNum);
 

@@ -13,7 +13,7 @@ public:
     Control(RFID_View *rfidview,CardReader *cardread,GMService *GMservicer);
     ~Control();
     void updateRFID(std::string rfidstr);
-
+    void updateDB(std::string rfidstr);
     RFID_View *rfidview;
     CardReader *cardread;
     GMService *GMservicer;

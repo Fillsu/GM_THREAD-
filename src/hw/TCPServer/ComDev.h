@@ -8,7 +8,9 @@ class ComDev
 public:
     ComDev();
     ~ComDev();
-
+    void sendData(char *writemesg);
+    void CompleteSend();
+    TCPServer *server;
 private:
 
 };

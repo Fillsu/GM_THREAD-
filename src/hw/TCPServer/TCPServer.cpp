@@ -81,13 +81,13 @@ int  TCPServer::waitaccept()
 
   }
 
-    void TCPServer:: writemsg(char *mesg_buf)
+    void TCPServer:: WriteMsg(char *mesg_buf)
   {     //int n=3; 
   
         //strcpy(write_mesg,"ok");
-        if(write(clientSock_ft,mesg_buf, 20) <= 0)
+        if(write(clientSock_ft,mesg_buf, 200) <= 0)
         perror("write()");
-        close(clientSock_ft); 
+        
   }
 
 
@@ -104,4 +104,10 @@ int  TCPServer::waitaccept()
 
 clientState=state;
     return 0;
+  }
+
+
+  void  TCPServer::closesocket()
+  {
+    close(clientSock_ft); 
   }

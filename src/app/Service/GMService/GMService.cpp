@@ -1,15 +1,15 @@
 #include "GMService.h"
 
 
-GMService::GMService(TCPServer *server):meberentity(new MemberEntity)
+GMService::GMService(ComDev *component):meberentity(new MemberEntity)
 {
- this->server=server;
+// this->server=server;
  GMState=CARD_READ;
  memeberid=meberentity->InfoList.size();
  member_add=0;
  rfid_view=new RFID_View();
- //component=new ComDev();
- 
+ this->component=component;
+
 
 }
 
@@ -22,18 +22,27 @@ GMService::~GMService()
  void GMService::updateService(std::string GMstr)
 {   // std::cout<<" "<<std::endl;
    
+   if(GMstr=="start")
+    {   
+        component->sendData("Golf Management Starts\nPlease type Command:\n\n");
+        component->CompleteSend();
+        return ;
+    }
    if(GMstr=="search")
     {   
-        sprintf(write_buf,"you got search");
-        server->writemsg(write_buf);
-    
+
+        component->sendData("You got search\nuse member card:\n\n");
+        component->CompleteSend();
+        return ;
     }
 
        if(GMstr=="wrong")
     {   
-        sprintf(write_buf,"you got wrong");
-        server->writemsg(write_buf);
-    
+        //sprintf(write_buf,"you got wrong");
+       // server->writemsg(write_buf);
+        component->sendData("you got wrong\n\n");
+        component->CompleteSend();
+        return ;
     }
     switch (GMState)
     {
@@ -88,7 +97,10 @@ GMService::~GMService()
         sprintf(rfid_view->lcdbuf,"Welcome GolfField");
         
         meberentity->printfInfo(cardNum,rfid_view->lcdbuf2);
-        server->writemsg(rfid_view->lcdbuf2);
+        sprintf(write_buf,rfid_view->lcdbuf2);
+      
+        component->sendData(write_buf);
+        //server->writemsg(rfid_view->lcdbuf2);
         rfid_view->updateView("CARDCHECK");
        // std::cout<<rfid_view->lcdbuf2<<std::endl;
        // sprintf(rfid_view->lcdbuf2,meberentity->Card_ID);
@@ -106,7 +118,7 @@ GMService::~GMService()
     }
     else 
     {
-        std::cout<<"Not Registered Member"<<std::endl;
+        //std::cout<<"Not Registered Member"<<std::endl;
         sprintf(rfid_view->lcdbuf,"Not Registered    ");
         sprintf(rfid_view->lcdbuf2,"Please Regist    ");
         rfid_view->updateView("CARDCHECK");
@@ -117,13 +129,18 @@ GMService::~GMService()
 
     if((meberentity->FindInfo(cardNum))==1)
     {
-        std::cout<<"It is already used card"<<std::endl;
-
-        meberentity->printfInfo(cardNum);
+        //std::cout<<"It is already used card"<<std::endl;
+        sprintf(rfid_view->lcdbuf,"It's already     ");
+        sprintf(rfid_view->lcdbuf2,"Registered Card ");
+        rfid_view->updateView("CARDCHECK");
+        //meberentity->printfInfo(cardNum);
 
     }
     else
-    {
+    {  
+        sprintf(rfid_view->lcdbuf,"REGISTERING      ");
+        sprintf(rfid_view->lcdbuf2,"Use your card");
+        rfid_view->updateView("CARDCHECK");
         std::cout<<"REGISTERING"<<std::endl;
         std::cout<<"DO you want to register new Member? [y/n] ";
         std::cin>>command;
@@ -163,3 +180,57 @@ GMService::~GMService()
     }
     }
 }
+
+
+void GMService::checkName_server(std::string Findstr)
+{
+
+     if((meberentity->FindInfo(Findstr))==1)
+    {   
+        meberentity->printfInfo_server(Findstr,write_buf);
+        sprintf(write_mesg,"%s %s","you got member\n\n",write_buf );
+        component->sendData(write_mesg);
+        //std::cout<<write_buf<<std::endl;
+        //component->sendData("member\nPlease type Command:\n");
+        component->CompleteSend();
+    }
+    else
+    {
+        component->sendData("No member\nPlease type Command:\n\n");
+        component->CompleteSend();
+    }
+
+}
+
+  void GMService::checkCard_server(int *cardNum)
+ {
+     if((meberentity->FindInfo(cardNum))==1)
+    {   
+        meberentity->printfInfo_server(cardNum,write_buf);
+        sprintf(write_mesg,"%s %s","you got member\n\n",write_buf );
+        component->sendData(write_mesg);
+        //std::cout<<write_buf<<std::endl;
+        //component->sendData("member\nPlease type Command:\n");
+        component->CompleteSend();
+    }
+    else
+    {
+        component->sendData("No member\nPlease type Command:\n\n");
+        component->CompleteSend();
+    }
+ }
+
+   void GMService::Delete_member(std::string delstr)
+ {
+
+        if(meberentity->DeleteInfo(delstr))
+        {
+        component->sendData("Delete member\nPlease type Command:\n\n");
+        component->CompleteSend();
+        }
+        else
+        {
+        component->sendData("Please check member information\nPlease type Command:\n\n");
+        component->CompleteSend();
+        }
+ }

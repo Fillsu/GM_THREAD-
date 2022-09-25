@@ -9,6 +9,7 @@
 #include "CardReader.h"
 #include "Control.h"
 #include "GMService.h"
+#include "ComDev.h"
 
 
 class GM
@@ -17,13 +18,14 @@ public:
     GM(  );
     ~GM();
     void GM_Run();
-
-TCPServer *server;
+ComDev *component;
+//TCPServer *server;
 CardReader *cardreader;
 RFID_View *rfidview1;
 GMService  *GMservicer;
 Control *cont;
 Listener *listener1;
+
 
 
 

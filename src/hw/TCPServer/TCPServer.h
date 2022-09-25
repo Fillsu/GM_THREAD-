@@ -18,7 +18,7 @@ public:
     void createSocket();
     int waitaccept();
     int readmsg();
-    void writemsg(char *mesg_buf);
+    void WriteMsg(char *mesg_buf);
     void getserversocket();
     void getclientsocket();
     char mesg[BUFSIZ];
@@ -27,6 +27,8 @@ public:
     bool getClientState();
     bool setClientState(int state);
     int clientSock_ft;
+
+    void  closesocket();
 private:
     int serverSock_ft;
     

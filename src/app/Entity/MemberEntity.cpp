@@ -120,7 +120,7 @@ bool MemberEntity::FindInfo(int *cardNum)
         if(memcmp(member.cardNum,cardNum,sizeof(member.cardNum))==0)
         {
             //printfInfo(member.id);
-            Card_ID=member.id;
+           // Card_ID=member.id;
             return true ;
             
         }
@@ -137,7 +137,7 @@ void MemberEntity::printfInfo(int *cardNum,char *buf)
         if(memcmp(member.cardNum,cardNum,sizeof(member.cardNum))==0)
         {   
             //std::cout<<a<<std::endl;
-            std::cout<<InfoList[member.id].name<<std::endl;
+           // std::cout<<InfoList[member.id].name<<std::endl;
             sprintf(buf,"%s Member     ",InfoList[member.id].name);
            // printfInfo(member.id);
                         
@@ -145,6 +145,59 @@ void MemberEntity::printfInfo(int *cardNum,char *buf)
     }
 
 }
+
+void MemberEntity::printfInfo_server(int *cardNum,char *buf)
+{
+    for(const auto &member:InfoList)
+    {
+        if(memcmp(member.cardNum,cardNum,sizeof(member.cardNum))==0)
+        {   
+            //std::cout<<a<<std::endl;
+            //std::cout<<InfoList[member.id].name<<std::endl;
+            sprintf(buf,"ID :%04d\nName: %s\nAddress: %s\nPhoneNumber: %s\nCardNum: %0x-%0x-%0x-%0x-%0x\n",
+               InfoList[member.id].id,
+                InfoList[member.id].name,
+                InfoList[member.id].address,
+                InfoList[member.id].phoneNumber,
+                InfoList[member.id].cardNum[0],
+                InfoList[member.id].cardNum[1],
+                InfoList[member.id].cardNum[2],
+                InfoList[member.id].cardNum[3],
+                InfoList[member.id].cardNum[4]
+            );
+            
+           // sprintf(buf,"%s Member     ",InfoList[member.id].name);
+           // printfInfo(member.id);
+                        
+        }
+    }
+}
+
+void MemberEntity::printfInfo_server(std::string Infostr,char *buf)
+{
+    for(const auto &member:InfoList)
+    {
+        if(strcmp(member.name,Infostr.c_str())==0)
+        {
+            sprintf(buf,"ID :%04d\nName: %s\nAddress: %s\nPhoneNumber: %s\nCardNum: %0x-%0x-%0x-%0x-%0x\n",
+               InfoList[member.id].id,
+                InfoList[member.id].name,
+                InfoList[member.id].address,
+                InfoList[member.id].phoneNumber,
+                InfoList[member.id].cardNum[0],
+                InfoList[member.id].cardNum[1],
+                InfoList[member.id].cardNum[2],
+                InfoList[member.id].cardNum[3],
+                InfoList[member.id].cardNum[4]
+            );
+            
+        }
+    }
+}
+    
+    
+   
+
 
 void MemberEntity::printfInfo(int *cardNum)
 {

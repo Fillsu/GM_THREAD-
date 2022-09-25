@@ -18,13 +18,33 @@ Control::~Control()
 
  void Control::updateRFID(std::string rfidstr)
  {
+
+
+if(rfidstr=="SERVERneedsCardRead")
+{
+cardNum[0]=cardread->data.number[0];
+cardNum[1]=cardread->data.number[1];
+cardNum[2]=cardread->data.number[2];
+cardNum[3]=cardread->data.number[3];
+cardNum[4]=cardread->data.number[4];
+GMservicer->checkCard_server(cardNum);
+return ;
+}
+
+if(rfidstr=="start")
+{
+   GMservicer->updateService("start");
+   return ;
+}
 if(rfidstr=="search")
 {
    GMservicer->updateService("search");
+   return ;
 }
 if(rfidstr=="wrong")
 {
    GMservicer->updateService("wrong");
+   return ;
 }
 if(rfidstr=="CARDREAD")
 {
@@ -38,15 +58,21 @@ cardNum[2]=cardread->data.number[2];
 cardNum[3]=cardread->data.number[3];
 cardNum[4]=cardread->data.number[4];
 GMservicer->checkCard(cardNum);//아하 이거 없으니까 unused 뜸 
-
+return ;
 }
 
 if(rfidstr=="MODECHECK")
 {
-   // std::cout<<"dd"<<std::endl;
+// std::cout<<"dd"<<std::endl;
 GMservicer->updateService("MODECHECK");
-
+return ;
+}
+GMservicer->checkName_server(rfidstr);
 
 }
 
-}
+ void Control::updateDB(std::string delstr)
+ {
+GMservicer->Delete_member(delstr);
+
+ }

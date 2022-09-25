@@ -29,7 +29,9 @@ public:
     uint8_t *a;
     ManageButton *modeButton;
     std::queue<char> *msgqueue;
-
+   
+    char delete_name[20];
+    char search_name[20];
     char comp[10];
 private:
 
