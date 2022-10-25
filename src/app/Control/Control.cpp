@@ -20,7 +20,7 @@ Control::~Control()
  {
 
 
-if(rfidstr=="SERVERneedsCardRead")
+if(rfidstr=="ServerNeedsCardRead")
 {
 cardNum[0]=cardread->data.number[0];
 cardNum[1]=cardread->data.number[1];

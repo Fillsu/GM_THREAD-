@@ -41,113 +41,96 @@ Listener::~Listener()
 
 void Listener::checkEvent()
 {
-             int i=0;
-             int j=5;
-             int k=0;
-             
-             int d=7;
-             int e=0;
 
-             static int precard=0;
-             static int timer=0;
-            if(!(msgqueue->empty()))
-            {
-           // std::cout<<" "<<std::endl ;
-            while(!(msgqueue->front()=='\0'))
-            {
-            
-           //std::cout<<msgqueue->front()<<std::endl ;
-            comp[i]=msgqueue->front();
-            //printf("%c",msgqueue->front());
-            msgqueue->pop();
-            i++;
-            }
-            comp[i]='\0';
-            msgqueue->pop();
+static int precard=0;
+int i=0;//this is for msgqueue
 
-                if(strncmp(comp,"Find",4)==0)
-                {
-                    //std::cout<<"check"<<std::endl;
-                
-                while(!(comp[j]=='\0'))
-                {
-                //comp[j]=search_name[k];어휴 ㅉㅉ
-                search_name[k]=comp[j];
-                j++;
-                k++;
-                }         
-                    search_name[k]='\0';
-                    //std::cout<<search_name<<std::endl;         
-                    comp[0]='\0';
-                    cont->updateRFID(search_name);
-                    return ;
-                }
+int Find_comp=5;//this is for 'Find Commnad'
+int Find_factor=0;
 
-                if(strncmp(comp,"Delete",6)==0)
-                {
-                    //std::cout<<"check"<<std::endl;
-                
-                while(!(comp[d]=='\0'))
-                {
-                //comp[j]=search_name[k];어휴 ㅉㅉ
-                delete_name[e]=comp[d];
-                d++;
-                e++;
-                }         
-                    delete_name[e]='\0';
-                    //std::cout<<search_name<<std::endl;         
-                    comp[0]='\0';
-                    cont->updateDB(delete_name);
-                    return ;
-                }
+int Delete_comp=7;//this is for 'Delete Commnad'
+int Delete_factor=0;
 
+static int timer=0;
 
+if(!(msgqueue->empty()))
+{
+//메세지큐에 저장되있는 문자열을 Pop
+	while(!(msgqueue->front()=='\0'))
+	{	
+		comp[i]=msgqueue->front();
+		msgqueue->pop();
+		i++;
+	}
+	
+	comp[i]='\0';
+	msgqueue->pop();
 
-                 if(strcmp(comp,"start")==0)
-                {
-                    //std::cout<<"check"<<std::endl;
-                    comp[0]='\0';
-                    cont->updateRFID("start");
-                    return ;
-                }
-
-                 if(strcmp(comp,"Card search")==0)
-                {
-                    //std::cout<<"check"<<std::endl;
-                    comp[0]='\0';
-                    cont->updateRFID("search");
-                    timer=millis();
-                    while(1)
-                    {
-                        if(millis()-precard>1000)
-                        {
-                            if(cardread->IsCard()==1 )
-                            {       
-                                precard=millis();
-                                cardread->getCardNumber();
-                                cont->updateRFID("SERVERneedsCardRead");
-                                break;
-                                
-                            }
-                        }   
-
-                        if(millis()-timer>10000)
-                        {
-                            break;       
-                        }
-
-                    
-                    }
-                    return ;
-                }
-                //std::cout<<"wrong"<<std::endl;
-                comp[0]='\0';
-                cont->updateRFID("wrong");
-                
-
-            }
-
-
+//Find 문자열 필터링 	
+	if(strncmp(comp,"Find",4)==0)
+	{
+		while(!(comp[Find_comp]=='\0'))
+		{
+			search_name[Find_factor]=comp[Find_comp];
+			Find_factor++;
+			Find_comp++;
+		}         
+		search_name[Find_factor]='\0';    
+		comp[0]='\0';
+		cont->updateRFID(search_name);
+		return ;
+	}
+//Delete 문자열 필터링 	
+	if(strncmp(comp,"Delete",6)==0)
+	{
+		while(!(comp[Delete_comp]=='\0'))
+		{
+			delete_name[Delete_factor]=comp[Delete_comp];
+			Delete_comp++;
+			Delete_factor++;
+		}         
+		delete_name[Delete_factor]='\0';       
+		comp[0]='\0';
+		cont->updateDB(delete_name);
+		return ;
+	}
+//Start 문자열 필터링 
+	if(strcmp(comp,"start")==0)
+	{
+		comp[0]='\0';
+		cont->updateRFID("start");
+		return ;
+	}
+//Card Search 문자열 필터링 	
+	if(strcmp(comp,"Card search")==0)
+	{
+		comp[0]='\0';
+		cont->updateRFID("search");
+		timer=millis();
+		while(1)
+		{
+			if(millis()-precard>1000)
+			{
+				if(cardread->IsCard()==1 )
+				{       
+				precard=millis();
+				cardread->getCardNumber();
+				cont->updateRFID("ServerNeedsCardRead");
+				break;				
+				}
+			}   		
+			if(millis()-timer>10000)
+			{
+			break;       
+			}
+		}		
+		return ;
+	}	
+//Command 비교가 다 끝았으면 comp를 공백으로 만들어준다. 
+//만약 잘못된 명령어가 입력되었을때는 wrong을 메세지를 전달한다. 
+	comp[0]='\0';
+	cont->updateRFID("wrong");
+}
        
 
 
